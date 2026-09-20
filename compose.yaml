@@ -1,0 +1,16 @@
+services:
+  smart-parking:
+    build: .
+    ports: ["18102:18102"]
+    environment:
+      PORT: 18102
+      PARKING_API_KEY: ${PARKING_API_KEY:-zhuatech-demo-key}
+      PARKING_DATA_FILE: /app/data/parking.json
+    volumes: ["parking-data:/app/data"]
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:18102/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+volumes:
+  parking-data:
